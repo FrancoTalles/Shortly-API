@@ -3,7 +3,6 @@ import { db } from "../Database/databaseConnection.js";
 export async function tokenValidation(req, res, next) {
   const { authorization } = req.headers;
   const token = authorization?.replace("Bearer ", "");
-  console.log(token)
   const url = req.body;
 
   if (!token) {
