@@ -13,7 +13,6 @@ export async function encurtaLinks(req, res) {
     );
 
     const resgatando_o_id = await db.query(`SELECT * FROM urls WHERE "shortUrl" = $1;`, [shortUrl]);
-    console.log(resgatando_o_id);
     const id_pego = resgatando_o_id.rows[0].id;
 
     const resBody = {

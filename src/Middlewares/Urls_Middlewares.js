@@ -3,6 +3,7 @@ import { db } from "../Database/databaseConnection.js";
 export async function tokenValidation(req, res, next) {
   const { authorization } = req.headers;
   const token = authorization?.replace("Bearer ", "");
+  console.log(token)
   const url = req.body;
 
   if (!token) {
@@ -14,13 +15,13 @@ export async function tokenValidation(req, res, next) {
       token,
     ]);
 
-    const user_id = sessao.rows[0].userId;
-
     if (sessao.rowCount === 0) {
       return res
         .status(401)
         .send("Você precisa estar logado para acessar essa funcionalidade");
     }
+
+    const user_id = sessao.rows[0].userId;
 
     res.locals.url = url;
     res.locals.userId = user_id;
