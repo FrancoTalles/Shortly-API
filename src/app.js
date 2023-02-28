@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import AuthRouter from "./Routers/Auth_Router.js";
+import UrlRouter from "./Routers/Urls_Router.js";
 
 // Configurações
 
@@ -13,7 +14,7 @@ server.use(cors());
 server.use(express.json());
 
 // Rotas
-server.use([AuthRouter]);
+server.use([AuthRouter, UrlRouter]);
 // Porta
 
 const port = process.env.PORT || 5000;
