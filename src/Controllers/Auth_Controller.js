@@ -16,7 +16,6 @@ export async function criarClientes(req, res) {
     }
 
     const passwordHash = bcrypt.hashSync(password, 10);
-    console.log(passwordHash);
 
     const user = await db.query(
       `INSERT INTO users (name, email, password) VALUES ($1, $2, $3);`,
@@ -30,5 +29,18 @@ export async function criarClientes(req, res) {
 }
 
 export async function logarCliente(req, res) {
-    
+  const user = res.locals.user;
+  const token = uuidV4();
+  const sendBody = { token: token };
+
+  try {
+    const sessao = await db.query(
+      `INSERT INTO sessions ("userId", token) VALUES ($1, $2);`,
+      [user.id, token]
+    );
+
+    res.status(200).send(sendBody);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 }

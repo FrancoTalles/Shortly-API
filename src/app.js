@@ -13,7 +13,7 @@ server.use(cors());
 server.use(express.json());
 
 // Rotas
-server.use([AuthRouter])
+server.use([AuthRouter]);
 // Porta
 
 const port = process.env.PORT || 5000;
