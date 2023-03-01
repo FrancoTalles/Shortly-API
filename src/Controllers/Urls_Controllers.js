@@ -70,3 +70,16 @@ export async function redirecionaParaLink(req, res) {
     res.status(500).send(error.message);
   }
 }
+
+export async function deletaLink(req, res) {
+  const objUrl = res.locals.url;
+
+  try {
+    const deleta_link = await db.query(`DELETE FROM urls WHERE id = $1;`, [
+      objUrl.id,
+    ]);
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+}
