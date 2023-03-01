@@ -2,8 +2,12 @@ import { Router } from "express";
 import {
   encurtaLinks,
   pegaLinkPeloId,
+  redirecionaParaLink,
 } from "../Controllers/Urls_Controllers.js";
-import { tokenValidation } from "../Middlewares/Urls_Middlewares.js";
+import {
+  redirectValidation,
+  tokenValidation,
+} from "../Middlewares/Urls_Middlewares.js";
 import { validateSchema } from "../Middlewares/validateSchema.js";
 import { url_schema } from "../Schemas/Url_Schema.js";
 
@@ -16,5 +20,6 @@ UrlRouter.post(
   encurtaLinks
 );
 UrlRouter.get("/urls/:id", pegaLinkPeloId);
+UrlRouter.get("/urls/open/:shortUrl", redirectValidation, redirecionaParaLink);
 
 export default UrlRouter;

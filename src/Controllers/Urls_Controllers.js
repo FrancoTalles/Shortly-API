@@ -33,10 +33,11 @@ export async function pegaLinkPeloId(req, res) {
   const { id } = req.params;
 
   try {
+    const procura_url = await db.query(`SELECT * FROM urls WHERE id = $1;`, [
+      id,
+    ]);
 
-    const procura_url = await db.query(`SELECT * FROM urls WHERE id = $1;`, [id]);
-  
-    if (procura_url.rowCount === 0){
+    if (procura_url.rowCount === 0) {
       return res.sendStatus(404);
     }
 
@@ -45,10 +46,26 @@ export async function pegaLinkPeloId(req, res) {
     const resBody = {
       id: url.id,
       shortUrl: url.shortUrl,
-      url: url.url
-    }
+      url: url.url,
+    };
 
     res.status(200).send(resBody);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+}
+
+export async function redirecionaParaLink(req, res) {
+  const objUrl = res.locals.url;
+
+  try {
+    const contador_novo = objUrl.visitCount + 1;
+
+    const atualiza_contador = db.query(
+      `UPDATE urls SET "visitCount" = $1 WHERE id = $2;`,
+      [contador_novo, objUrl.id]
+    );
+    res.redirect(objUrl.url);
   } catch (error) {
     res.status(500).send(error.message);
   }
