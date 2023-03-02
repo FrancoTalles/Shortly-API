@@ -27,7 +27,7 @@ export async function encurtaLinks(req, res) {
   } catch (error) {
     res.status(500).send(error.message);
   }
-};
+}
 
 export async function pegaLinkPeloId(req, res) {
   const { id } = req.params;
@@ -53,7 +53,7 @@ export async function pegaLinkPeloId(req, res) {
   } catch (error) {
     res.status(500).send(error.message);
   }
-};
+}
 
 export async function redirecionaParaLink(req, res) {
   const objUrl = res.locals.url;
@@ -69,7 +69,7 @@ export async function redirecionaParaLink(req, res) {
   } catch (error) {
     res.status(500).send(error.message);
   }
-};
+}
 
 export async function deletaLink(req, res) {
   const objUrl = res.locals.url;
@@ -82,7 +82,7 @@ export async function deletaLink(req, res) {
   } catch (error) {
     res.status(500).send(error.message);
   }
-};
+}
 
 export async function pegaDadosDoUser(req, res) {
   const userSession = res.locals.userSession;
@@ -110,4 +110,22 @@ export async function pegaDadosDoUser(req, res) {
   } catch (error) {
     res.status(500).send(error.message);
   }
-};
+}
+
+export async function formaRanking(req, res) {
+  try {
+    const query = `SELECT users.id, users.name,  CAST(COALESCE(COUNT(urls.id), 0) AS INTEGER) as "linksCount",
+    CAST(COALESCE(SUM(urls."visitCount"), 0) AS INTEGER) as "visitCount"
+    FROM users
+    LEFT JOIN urls ON users.id = urls."userId"
+    GROUP BY users.id
+    ORDER BY "visitCount" DESC
+    LIMIT 10;`;
+
+    const ranking = await db.query(query);
+
+    res.status(200).send(ranking.rows);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+}

@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   deletaLink,
   encurtaLinks,
+  formaRanking,
   pegaDadosDoUser,
   pegaLinkPeloId,
   redirecionaParaLink,
@@ -27,5 +28,6 @@ UrlRouter.get("/urls/:id", pegaLinkPeloId);
 UrlRouter.get("/urls/open/:shortUrl", redirectValidation, redirecionaParaLink);
 UrlRouter.delete("/urls/:id", deleteValidation, deletaLink);
 UrlRouter.get("/users/me", userValidation, pegaDadosDoUser);
+UrlRouter.get("/ranking", formaRanking);
 
 export default UrlRouter;
