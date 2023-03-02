@@ -29,7 +29,7 @@ export async function tokenValidation(req, res, next) {
   }
 
   next();
-}
+};
 
 export async function redirectValidation(req, res, next) {
   const { shortUrl } = req.params;
@@ -49,7 +49,7 @@ export async function redirectValidation(req, res, next) {
     res.status(500).send(error.message);
   }
   next();
-}
+};
 
 export async function deleteValidation(req, res, next) {
   const { authorization } = req.headers;
@@ -98,4 +98,30 @@ export async function deleteValidation(req, res, next) {
     res.status(500).send(error.message);
   }
   next();
-}
+};
+
+export async function userValidation(req, res, next) {
+  const { authorization } = req.headers;
+  const token = authorization?.replace("Bearer ", "");
+
+  if (!token) {
+    return res.status(401).send("Token não valido");
+  }
+
+  try {
+    const sessao = await db.query(`SELECT * FROM sessions WHERE token = $1;`, [
+      token,
+    ]);
+
+    if (sessao.rowCount === 0) {
+      return res
+        .status(401)
+        .send("Você precisa estar logado para acessar essa funcionalidade");
+    }
+
+    res.locals.userSession = sessao.rows[0];
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+  next();
+};
